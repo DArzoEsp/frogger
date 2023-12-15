@@ -1,4 +1,5 @@
 const timeLeftDisplay = document.querySelector('.time-left');
+const messageDisplay = document.querySelector('.start-message');
 const resultDisplay = document.querySelector('.result');
 const startPauseButton = document.querySelector('.start-pause-button');
 const squares = document.querySelectorAll('.grid div');
@@ -162,5 +163,6 @@ startPauseButton.addEventListener('click', () => {
     } else {
         timerId = setInterval(autoMove, 1000);
         document.addEventListener('keyup', moveFrog);
+        messageDisplay.innerHTML = 'GAME HAS BEGUN'
     }
 })

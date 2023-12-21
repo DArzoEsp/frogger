@@ -14,10 +14,12 @@ const totalSquares = 80;
 const frog = document.querySelector('.starting-block');
 frog.classList.add('frog');
 
-let currentIndex = 76;
-let timerId;
-let currentTime = 20;
+// starting position
+let currentIndex = 76
+let timerId;                // setting interval so i can pause or start and for animations
+let currentTime = 20;       // amount of time to finish level
 
+// using user input to determine where to move
 function moveFrog(e) {
     squares[currentIndex].classList.remove('frog');
 
@@ -38,23 +40,24 @@ function moveFrog(e) {
 
     squares[currentIndex].classList.add('frog')
     win();
-    lose();
+    lose();                                                 // checking for a win and lost every move
 }
 
 function autoMove() {
     currentTime--;
     timeLeftDisplay.textContent = currentTime;
     logLeft.forEach(logLeft => moveLogLeft(logLeft));
-    logRight.forEach(logRight => moveLogRight(logRight));
+    logRight.forEach(logRight => moveLogRight(logRight));   // animation for squares 
     carLeft.forEach(carLeft => moveCarLeft(carLeft));
     carRight.forEach(carRight => moveCarRight(carRight));
-    
+    lose();                                                 // checks for lost when animating
 }
 
+// moves the log to the left
 function moveLogLeft(logLeft) {
     switch(true) {
         case logLeft.classList.contains('l1'):
-            logLeft.classList.remove('l1');
+            logLeft.classList.remove('l1');         
             logLeft.classList.add('l2');
             break;
         case logLeft.classList.contains('l2'):
@@ -76,6 +79,7 @@ function moveLogLeft(logLeft) {
     }
 }
 
+// moves it to the right
 function moveLogRight(logRight) {
     switch(true) {
         case logRight.classList.contains('l1'):
@@ -100,6 +104,7 @@ function moveLogRight(logRight) {
             break;
     }
 }
+
 
 function moveCarLeft(carLeft) {
     switch(true) {
@@ -134,31 +139,34 @@ function moveCarRight(carRight) {
     }
 }
 
+// checks for collision
 function lose() {
-    if (squares[currentIndex].classList.contains('c1') ||
-    squares[currentIndex].classList.contains('l4') ||
+    if (squares[currentIndex].classList.contains('c1') ||   // black squares are cars
+    squares[currentIndex].classList.contains('l4') ||       // light blue squares are water  
     squares[currentIndex].classList.contains('l5') ||
     currentTime <= 0
     ) {
-        resultDisplay.textContent = 'You lose';
-        clearInterval(timerId);
-        squares[currentIndex].classList.remove('frog');
-        document.removeEventListener('keyup', moveFrog);
+        resultDisplay.textContent = 'You lose'; 
+        clearInterval(timerId);                             // stops timer
+        squares[currentIndex].classList.remove('frog');     // removes the frog or player
+        document.removeEventListener('keyup', moveFrog);    // stops movement
     }
 }
 
+// checks for wins
 function win() {
-    if(squares[currentIndex].classList.contains('ending-block')) {
-        resultDisplay.textContent = 'You win';
+    if(squares[currentIndex].classList.contains('ending-block')) {  // checking to see when red square equals green square
+        resultDisplay.textContent = 'You win';  
         clearInterval(timerId);
         document.removeEventListener('keyup', moveFrog);
     }
 }
 
+// waits for click
 startPauseButton.addEventListener('click', () => {
-    if(timerId) {
-        clearInterval(timerId);
-        timerId = null;
+    if(timerId) {                                           // if timer is counting then continue
+        clearInterval(timerId);                             // stops counting
+        timerId = null;                                     // make it null in order to set it again
         document.removeEventListener('keyup', moveFrog);
     } else {
         timerId = setInterval(autoMove, 1000);
